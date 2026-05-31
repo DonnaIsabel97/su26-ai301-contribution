@@ -1,9 +1,13 @@
-# Contribution #460: Typing should autofocus the chatbar
+# Contribution 1: Typing should autofocus the chatbar
+---
 
 **Contribution Number:** 1
+
 **Student:** Donna Carschmit 
+
 **Issue:** https://github.com/session-foundation/session-desktop/issues/460
-**Status:** Phase I -- In Progress
+
+**Status:** Phase I - Complete
 
 ---
 
