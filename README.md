@@ -7,7 +7,7 @@
 
 **Issue:** https://github.com/session-foundation/session-desktop/issues/460
 
-**Status:** Phase II - In process
+**Status:** Phase II - Complete
 
 ---
 
@@ -81,16 +81,17 @@ I set up the project locally on Windows using the project’s `CONTRIBUTING.md` 
 
 ### Steps to Reproduce
 
-1. Open Session Desktop locally in development mode.
-2. Open or select any conversation.
-3. Click outside the chatbar, such as on the message history or conversation list, so the message input is no longer focused.
-4. Type a normal letter key, such as h.
-5. Observe the chatbar.
+1. Launch Session Desktop.
+2. Open a conversation.
+3. Click outside the chatbar.
+4. Type a normal letter.
+5. Expected: chatbar focuses.
+6. Actual: chatbar does not focus.
 
 ### Reproduction Evidence
 
-- **Commit showing reproduction:** [Link to commit in your fork]
-- **Screenshots/logs:** [If applicable]
+- **Commit showing reproduction:** Not applicable for Phase II; reproduction was documented manually in the local running app before implementation.
+- **Screenshots/logs:** Not included for Phase II. I plan to record a short video during implementation showing the before/after behavior.
 - **My findings:** The issue is reproducible locally. The composition input already supports programmatic focus, but the application only focuses it in specific existing cases, not when normal typing begins elsewhere in the main conversation UI.
 
 ---
@@ -139,7 +140,7 @@ The handler should ignore:
 5. Verify that existing keyboard shortcuts still work.
 
 **Implement:** Implementation will happen on branch:
-https://github.com/<your-username>/session-desktop/tree/fix-issue-460
+https://github.com/DonnaIsabel97/session-desktop/tree/fix-issue-460
 
 **Review:** Before opening a PR, I will self-review against the project’s contribution guidance and make sure the change is small, scoped, and does not modify unrelated build files or generated artifacts.
 
