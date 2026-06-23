@@ -7,7 +7,7 @@
 
 **Issue:** https://github.com/session-foundation/session-desktop/issues/460
 
-**Status:** Phase III - Complete
+**Status:** Phase IV - Complete
 
 ---
 
@@ -219,15 +219,17 @@ Automated testing:
 
 ## Pull Request
 
-**PR Link:** [GitHub PR URL when submitted]
+**PR Link:** [session-foundation/session-desktop#1956](https://github.com/session-foundation/session-desktop/pull/1956)
 
-**PR Description:** [Draft or final PR description - much of the content above can be adapted]
+**PR Description:** 
+
+This PR fixes session-foundation/session-desktop#460 by focusing the message composition input when the user starts typing a normal printable character while a conversation is open. The implementation reuses the existing composition input ref and avoids editable fields and modifier-key shortcuts.
+
 
 **Maintainer Feedback:**
-- [Date]: [Summary of feedback received]
-- [Date]: [How you addressed it]
+- No maintainer feedback yet
 
-**Status:** [Awaiting review / Iterating / Approved / Merged]
+**Status:** Awaiting review 
 
 ---
 
@@ -235,20 +237,29 @@ Automated testing:
 
 ### Technical Skills Gained
 
-[What you learned technically]
+I learned how focus management works in a large React/Electron application, especially when the input is a custom `contentEditable` component rather than a normal `<textarea>`. I also learned how the project organizes keyboard shortcuts, focus scopes, and composition input behavior across files like `CompositionTextArea.tsx`, `CompositionInput.tsx`, `useKeyboardShortcut.tsx`, and `state/focus.ts`.
+
+I also gained more experience debugging Windows native build issues involving Node, pnpm, CMake, Visual Studio Build Tools, and long path problems in `node_modules`.
 
 ### Challenges Overcome
 
-[What was hard and how you solved it]
+The hardest part was getting the project running locally on Windows. I had to resolve a Node version mismatch, install the correct Visual Studio 2022 C++ build tools, install CMake, and work around long path issues caused by building inside OneDrive.
+
+For the feature itself, the main challenge was making the chatbar autofocus without breaking existing keyboard shortcuts or stealing focus from search fields and other editable inputs. I solved this by keeping the change scoped to `CompositionTextArea.tsx`, ignoring modifier-key events and editable targets, and reusing the existing composition input ref methods.
 
 ### What I'd Do Differently Next Time
 
-[Reflection on your process]
+Next time, I would start by checking the project’s required Node version, native build dependencies, and Windows-specific setup earlier before trying repeated installs. I would also document each setup error as it happened instead of reconstructing the setup process afterward.
+
+For implementation, I would inspect the existing focus and keyboard shortcut architecture earlier so the solution plan could be even more precise before coding.
 
 ---
 
 ## Resources Used
 
-- [Link to helpful documentation]
-- [Tutorial or Stack Overflow post that helped]
-- [GitHub issues or discussions that helped]
+- [Session Desktop issue #460](https://github.com/session-foundation/session-desktop/issues/460)
+- [Session Desktop PR #1956](https://github.com/session-foundation/session-desktop/pull/1956)
+- [Node-gyp Windows setup documentation](https://github.com/nodejs/node-gyp#on-windows)
+- [Visual Studio Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/)
+- [CMake downloads](https://cmake.org/download/)
+- Project files reviewed: `CONTRIBUTING.md`, `CompositionTextArea.tsx`, `CompositionInput.tsx`, `useKeyboardShortcut.tsx`, `keyboardShortcuts.ts`, and `state/focus.ts`
