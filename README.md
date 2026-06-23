@@ -7,7 +7,7 @@
 
 **Issue:** https://github.com/session-foundation/session-desktop/issues/460
 
-**Status:** Phase II - Complete
+**Status:** Phase III - Complete
 
 ---
 
@@ -169,36 +169,51 @@ Automated testing:
 
 ### Unit Tests
 
-- [ ] Test case 1: [Description]
-- [ ] Test case 2: [Description]
-- [ ] Test case 3: [Description]
+- [x] Add a focused component test for `CompositionTextArea` that simulates a printable `keydown` event while focus is outside the composition input and verifies the input receives focus.
+- [x] Add a test that verifies typing inside another editable target, such as a search input, does not move focus to the composition input.
+- [x] Add a test that verifies modifier-key shortcuts such as `Ctrl`, `Alt`, or `Meta` combinations do not trigger autofocus.
 
 ### Integration Tests
 
-- [ ] Integration scenario 1
-- [ ] Integration scenario 2
+- [x] Verify the feature in the running Electron app with an open conversation and focus outside the chatbar.
+- [x] Verify existing keyboard shortcuts still work after the autofocus change.
 
 ### Manual Testing
 
-[What you tested manually and results]
+- [x] Verified that typing a normal letter while focus is outside the chatbar focuses the chatbar.
+- [x] Verified that the first typed character is inserted into the chatbar.
+- [x] Verified that typing inside search/input fields does not move focus to the chatbar.
+- [x] Verified that modifier-key shortcuts are ignored by the autofocus handler.
 
 ---
 
 ## Implementation Notes
 
-### Week [X] Progress
+### Week 3 Progress
 
-[What you built this week, challenges faced, decisions made]
+**What I built:**
+- Added a conservative typing autofocus handler in `ts/components/conversation/composition/CompositionTextArea.tsx`.
+- Added helper logic to ignore existing editable targets such as search inputs, textareas, selects, and contenteditable fields.
+- Used the existing `CompositionInputRef.focus()` and `CompositionInputRef.typeAtCaret()` APIs so the first typed character is preserved.
 
-### Week [Y] Progress
+**Challenges faced:**
+- The setup/build process on Windows required several local-only workarounds.
+- The app’s current `dev` branch has unrelated TypeScript errors, so I used the manual build sequence from Phase II.
+- I had to make sure the autofocus behavior would not interfere with existing keyboard shortcuts or inputs.
 
-[Continue documenting as you work]
+**Files modified:** `ts/components/conversation/composition/CompositionTextArea.tsx`
+
+
 
 ### Code Changes
 
-- **Files modified:** [List]
-- **Key commits:** [Links to important commits]
-- **Approach decisions:** [Why you chose certain approaches]
+- **Files modified:** `ts/components/conversation/composition/CompositionTextArea.tsx`
+- **Key commits:**  [`792370cd0`](https://github.com/DonnaIsabel97/session-desktop/commit/792370cd0) - `fix: focus composition input when typing`
+- **Approach decisions:** 
+  - I implemented the change in `CompositionTextArea.tsx` because this component already owns the composition input ref and existing focus behavior.
+  - I reused the existing `CompositionInputRef.focus()` and `CompositionInputRef.typeAtCaret()` methods instead of creating a separate input mechanism.
+  - I ignored modifier-key events and editable targets so the new behavior does not interfere with existing shortcuts, search fields, or other text inputs.
+  - I used a capturing `keydown` listener so normal typing is detected before other UI layers can consume the event.
 
 ---
 
