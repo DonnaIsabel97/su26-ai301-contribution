@@ -14,7 +14,7 @@ This repository contains my work for the CodePath AI301 Open Source Capstone.
 ---
 
 ### Contribution 2
-**Project:** 
+**Project:** Careerflow
 
 **Issue:** #7 – Keyboard shortcut to open the "Add application" modal
 
