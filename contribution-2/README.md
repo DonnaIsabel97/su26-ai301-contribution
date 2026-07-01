@@ -3,6 +3,7 @@
 
 **Contribution Number:** 2  
 **Student:** Donna Carschmit
+
 **Issue:** https://github.com/Joun-Mikhail/careerflow/issues/7 
 
 **Status:** Phase IV - Complete
