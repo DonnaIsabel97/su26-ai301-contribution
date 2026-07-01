@@ -5,15 +5,15 @@
 **Student:** Donna Carschmit
 **Issue:** https://github.com/Joun-Mikhail/careerflow/issues/7 
 
-**Status:** Phase I - Complete
+**Status:** Phase IV - Complete
 
 ---
 
 ## Why I Chose This Issue
 
-I chose issue #460, "Typing should autofocus the chatbar," because it combines a straightforward user experience improvement with an opportunity to work on frontend functionality in a real-world application. Since I have experience with JavaScript and TypeScript, I thought it would be a good way to apply those skills while learning how a larger open-source project handles keyboard events and focus management.
+I chose issue #7, "Keyboard shortcut to open the Add application modal," because it is a focused frontend issue that matches my experience with JavaScript and TypeScript. The issue has clear acceptance criteria and gave me a chance to practice keyboard event handling in a real React application.
 
-My goal is to become more comfortable navigating an unfamiliar codebase and contributing to production software. From reading the discussion, I understand that the challenge is to automatically focus the chat input without affecting existing keyboard shortcuts. I'm looking forward to learning how these interactions are implemented and to making a small improvement that enhances the overall user experience.
+This issue interested me because it improves the user experience in a small but meaningful way. Instead of requiring users to click the Add application button every time, the Applications page can support a simple keyboard shortcut. I also wanted more practice working with modal behavior, input focus handling, and frontend testing in an open-source project.
 
 ---
 
@@ -21,20 +21,23 @@ My goal is to become more comfortable navigating an unfamiliar codebase and cont
 
 ### Problem Description
 
-Currently, users must manually click on the chat input before they can start typing a message if the input is not already focused. This makes the messaging experience feel less smooth compared to other desktop messaging applications.
-
+Currently, users must click the Add application button on the Applications page to open the Add application modal. The issue asks for a keyboard shortcut so users can press `n` to open the modal when they are not typing in an input field.
 
 ### Expected Behavior
 
-When a user begins typing while viewing a conversation, the chat input should automatically receive focus so they can start composing a message immediately. This behavior should not interfere with existing keyboard shortcuts or navigation controls.
+When the user is on the Applications page and presses `n`, the Add application modal should open. The shortcut should only work when the user is not focused inside an input, textarea, select, or editable field. Pressing `Esc` should still close the modal.
 
 ### Current Behavior
 
-If the chat input is not focused, typing does not automatically place the cursor in the message box. Users must first click on the chat input before they can begin typing.
+Before the change, pressing `n` on the Applications page did not open the Add application modal. Users had to manually click the Add application button.
 
 ### Affected Components
 
-Based on the issue discussion, this feature will likely involve the chat input component and the keyboard event handling responsible for managing focus. It will also require reviewing the existing keyboard shortcuts to ensure they continue to function as intended.
+The main affected file is:
+
+- `frontend/src/pages/ApplicationsPage.tsx`
+
+The existing modal component is also relevant because it already handles closing the modal with `Esc`.
 
 ---
 
@@ -42,19 +45,27 @@ Based on the issue discussion, this feature will likely involve the chat input c
 
 ### Environment Setup
 
-[Notes on setting up your local development environment - challenges you faced, how you solved them]
+I set up the CareerFlow project locally using Docker, following the project’s contributing instructions.
+
+I initially tried setting up the backend manually with a Python virtual environment, but decided to use Docker because the contributing guide recommended it as the fastest setup path. I had to make sure Docker Desktop was running before using:
+
+docker compose up --build
+
+Once Docker was running, I was able to open the application locally and test the Applications page.
 
 ### Steps to Reproduce
 
-1. [Step 1]
-2. [Step 2]
-3. [Observed result]
+1. Start the project locally with Docker.
+2. Open the CareerFlow frontend in the browser.
+3. Navigate to the Applications page.
+4. Press the n key while focus is not inside an input field.
+5. Observe that the Add application modal does not open.
 
 ### Reproduction Evidence
 
-- **Commit showing reproduction:** [Link to commit in your fork]
-- **Screenshots/logs:** [If applicable]
-- **My findings:** [What you discovered during reproduction]
+- **Commit showing reproduction:** Not applicable because this was reproduced manually before implementing the fix.
+- **Screenshots/logs:** I used manual browser testing to confirm the issue.
+- **My findings:** The Applications page already had an Add application modal controlled by React state, but there was no keyboard listener for opening it with n.
 
 ---
 
@@ -62,30 +73,46 @@ Based on the issue discussion, this feature will likely involve the chat input c
 
 ### Analysis
 
-[Your analysis of the root cause - what's causing the issue?]
+The root cause was that the Applications page only opened the Add application modal through the button click handler. There was no global keyboard event handler on the page to detect when the user pressed n.
+The fix needed to be careful because the shortcut should not trigger while the user is typing in form fields. Without this guard, pressing n inside an input could accidentally open the modal.
 
 ### Proposed Solution
 
-[High-level description of your fix approach]
+Add a keydown listener in frontend/src/pages/ApplicationsPage.tsx that listens for the n key. The listener should check whether the current focused element is an input, textarea, select, or editable element. If the user is not typing in one of those elements, pressing n should open the Add application modal.
+The handler should also call event.preventDefault() so the n key does not get inserted into the first field when the modal opens.
 
 ### Implementation Plan
 
 Using UMPIRE framework (adapted):
 
-**Understand:** [Restate the problem]
+**Understand:** 
+The Applications page needs a keyboard shortcut that opens the Add application modal when the user presses n, but only when the user is not typing in a form field.
 
-**Match:** [What similar patterns/solutions exist in the codebase?]
+**Match:** 
+The existing page already uses React state to control whether the Add application modal is open. The existing modal also already supports Esc to close, so the new change only needs to open the modal and should preserve the existing close behavior.
 
-**Plan:** [Step-by-step implementation plan]
-1. [Modify file X to do Y]
-2. [Add function Z]
-3. [Update tests]
+**Plan:** 
+1. Modify frontend/src/pages/ApplicationsPage.tsx.
+2. Import useEffect from React.
+3. Add a keydown listener for the n key.
+4. Guard against inputs, textareas, selects, contenteditable elements, and modifier keys.
+5. Call event.preventDefault() before opening the modal.
+6. Verify that Esc still closes the modal.
+7. Run frontend checks before submitting the PR.
 
-**Implement:** [Link to your branch/commits as you work]
+**Implement:** 
+Branch: [fix-issue-7](https://github.com/DonnaIsabel97/careerflow/tree/fix-issue-7)
+Commit: [92c9160](https://github.com/DonnaIsabel97/careerflow/commit/92c9160)
 
-**Review:** [Self-review checklist - does it follow the project's contribution guidelines?]
+**Review:** 
+I reviewed the change against the project’s contributing guidelines. The change is focused, follows the existing React style, uses a conventional commit message, and does not add secrets, debug output, or unrelated changes.
 
-**Evaluate:** [How will you verify it works?]
+**Evaluate:** 
+I verified the behavior manually and ran the frontend checks:
+npm run lint
+npm run typecheck
+npm test
+npm run build
 
 ---
 
@@ -93,50 +120,52 @@ Using UMPIRE framework (adapted):
 
 ### Unit Tests
 
-- [ ] Test case 1: [Description]
-- [ ] Test case 2: [Description]
-- [ ] Test case 3: [Description]
+- [x] Test case 1: Pressing n on the Applications page opens the Add application modal.
+- [x] Test case 2: Pressing n while focused inside a form field does not open the modal.
+- [x] Test case 3: Pressing Esc still closes the modal.
 
 ### Integration Tests
 
-- [ ] Integration scenario 1
-- [ ] Integration scenario 2
+- [x] User navigates to the Applications page and opens the Add application modal using the keyboard shortcut.
+- [x] User types in an input field and the shortcut does not interrupt normal typing behavior.
 
 ### Manual Testing
 
-[What you tested manually and results]
+- Verified that pressing n on the Applications page opens the Add application modal.
+- Verified that the modal opens with an empty Role title field.
+- Verified that pressing Esc closes the modal.
+- Verified that pressing n inside the search input does not open the modal.
+- Verified that frontend checks passed.
 
 ---
 
 ## Implementation Notes
 
-### Week [X] Progress
+### Week [1] Progress
 
-[What you built this week, challenges faced, decisions made]
-
-### Week [Y] Progress
-
-[Continue documenting as you work]
+I implemented the keyboard shortcut for issue #7. The main change was adding a guarded keydown listener in frontend/src/pages/ApplicationsPage.tsx.
+The first version opened the modal, but the letter n was also inserted into the Role title field when the modal appeared. I fixed this by adding event.preventDefault() before opening the modal. After that, the modal opened correctly without inserting the shortcut key into the form.
+I also tested that the shortcut does not interfere with typing inside inputs and that the existing Esc behavior still works.
 
 ### Code Changes
 
-- **Files modified:** [List]
-- **Key commits:** [Links to important commits]
-- **Approach decisions:** [Why you chose certain approaches]
+- **Files modified:** frontend/src/pages/ApplicationsPage.tsx
+- **Key commits:** - [92c9160-feat(applications): add shortcut for application modal](https://github.com/DonnaIsabel97/careerflow/commit/92c9160)
+- **Approach decisions:**
+  I kept the change inside the Applications page because the shortcut is page-specific. I also reused the existing modal state instead of creating a new modal flow. The keyboard listener includes guards for form fields so the shortcut does not interfere with normal typing.
 
 ---
 
 ## Pull Request
 
-**PR Link:** [GitHub PR URL when submitted]
+**PR Link:** [GitHub PR URL when submitted](https://github.com/Joun-Mikhail/careerflow/pull/10)
 
-**PR Description:** [Draft or final PR description - much of the content above can be adapted]
+**PR Description:** Adds the keyboard shortcut requested in issue #7. On the Applications page, pressing n now opens the Add application modal when the user is not typing in a form field.
 
 **Maintainer Feedback:**
-- [Date]: [Summary of feedback received]
-- [Date]: [How you addressed it]
+- No maintainer feedback yet.
 
-**Status:** [Awaiting review / Iterating / Approved / Merged]
+**Status:** Awaiting review
 
 ---
 
@@ -144,20 +173,23 @@ Using UMPIRE framework (adapted):
 
 ### Technical Skills Gained
 
-[What you learned technically]
+I practiced adding keyboard event handling in a React page and learned more about guarding shortcuts so they do not interfere with normal form input. I also gained more experience testing frontend behavior manually and running project checks before submitting a pull request.
 
 ### Challenges Overcome
 
-[What was hard and how you solved it]
+The main challenge was that the first version opened the modal but also inserted the letter n into the Role title field. I solved this by preventing the default key behavior before opening the modal. I also had to make sure the shortcut only worked when the user was not focused inside a form field.
 
 ### What I'd Do Differently Next Time
 
-[Reflection on your process]
+Next time, I would test keyboard shortcuts against focused inputs earlier in the process. I would also check the project’s existing modal and keyboard handling patterns before writing the first version so I can align with the codebase more quickly.
 
 ---
 
 ## Resources Used
 
-- [Link to helpful documentation]
-- [Tutorial or Stack Overflow post that helped]
-- [GitHub issues or discussions that helped]
+- [CareerFlow issue #7: Keyboard shortcut to open the Add application modal](https://github.com/Joun-Mikhail/careerflow/issues/7)
+- [CareerFlow CONTRIBUTING.md](https://github.com/Joun-Mikhail/careerflow/blob/main/CONTRIBUTING.md)
+- [React documentation: `useEffect`](https://react.dev/reference/react/useEffect)
+- [MDN Web Docs: `keydown` event](https://developer.mozilla.org/en-US/docs/Web/API/Element/keydown_event)
+- [MDN Web Docs: `event.preventDefault()`](https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault)
+- [MDN Web Docs: `HTMLElement.isContentEditable`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/isContentEditable)
