@@ -227,9 +227,10 @@ This PR fixes session-foundation/session-desktop#460 by focusing the message com
 
 
 **Maintainer Feedback:**
-- No maintainer feedback yet
+- Maintainers reviewed the PR and approved the approach.
+- No additional code changes were requested before merge.
 
-**Status:** Awaiting review 
+**Status:** Merged 
 
 ---
 
