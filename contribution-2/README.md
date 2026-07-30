@@ -164,9 +164,11 @@ I also tested that the shortcut does not interfere with typing inside inputs and
 **PR Description:** Adds the keyboard shortcut requested in issue #7. On the Applications page, pressing n now opens the Add application modal when the user is not typing in a form field.
 
 **Maintainer Feedback:**
-- No maintainer feedback yet.
+- Maintainer approved and merged the PR.
+- No implementation changes were requested.
+- Merge required maintainer override due to repository deployment configuration, not because of the code change.
 
-**Status:** Awaiting review
+**Status:** Merged
 
 ---
 
